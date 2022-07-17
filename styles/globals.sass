@@ -1,0 +1,43 @@
+@tailwind base
+@tailwind components
+@tailwind utilities
+
+@import './mixins'
+
+@layer base
+	html
+		font-size: 18px
+		scroll-behavior: smooth
+		overflow-x: hidden
+		$color: #d62643
+		--color-primary: #{ getRGB($color)}
+		&.dark
+			$color: #f35771
+			--color-primary: #{ getRGB($color)}
+
+	#__next
+		@apply flex flex-col min-h-screen
+
+@layer components
+	body
+		@include dot_matrix(#fff,#ccc9)
+		@apply bg-gray-50 dark:bg-gray-900
+		.dark &
+			@include dot_matrix(#111,#222b)
+
+	.nav-button
+		@apply flex text-gray-600 dark:text-gray-400
+		@apply hover:bg-gray-500/20 dark:hover:bg-gray-500/10 py-1 px-2.5 rounded relative
+
+	.social-button
+		@apply inline-flex text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 p-2.5 rounded-full
+
+	.flex-center
+		@apply items-center justify-center
+
+	.title-page
+		@apply uppercase font-sans tracking-widest text-gray-600 dark:text-gray-400
+		@apply my-6 font-thin border-b border-gray-200 dark:border-gray-800 pb-1
+	.title-section
+		@apply mt-4 mb-2 flex font-sans border-b border-gray-200 dark:border-gray-800 pb-1
+		@apply uppercase tracking-widest text-gray-600 dark:text-gray-400

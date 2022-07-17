@@ -1,0 +1,10 @@
+@function getRGB($c) {
+	@return red($c) + ',' + green($c) + ',' + blue($c);
+}
+
+@mixin dot_matrix($c1, $c2) {
+	$W: 24px;
+	background: linear-gradient(180deg, #0000 0, $c1 400px),
+		fixed 0 0 /#{$W} #{$W} radial-gradient($c2 1px, #0000 0),
+		fixed #{$W/2} #{$W/2} /#{$W} #{$W} radial-gradient($c2 1px, #0000 0);
+}

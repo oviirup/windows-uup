@@ -1,0 +1,60 @@
+
+/* prettier-ignore */
+h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5
+	@apply font-heading
+h1,.h1
+	@apply text-3xl
+h2,.h2
+	@apply text-2xl
+h3,.h3
+	@apply text-xl
+h4,.h4
+	@apply text-lg
+
+a
+	@apply text-primary cursor-pointer
+p
+	@apply mb-4
+img
+	object-fit: cover
+hr
+	@apply border-gray-300 dark:border-gray-700 flex-1
+
+input
+	background: none
+[multiple], [type=date], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], select, textarea
+	@apply px-3 py-2 rounded appearance-none
+
+
+.article-body
+	ul, ol
+		@apply list-disc mb-4
+	li
+		@apply ml-5
+
+.container
+	@apply max-w-xl md:max-w-3xl
+
+.excerpt
+	overflow: hidden
+	text-overflow: ellipsis
+	display: -webkit-box
+	-webkit-box-orient: vertical
+	-webkit-line-clamp: 1
+	@for $i from 2 to 9
+		&-#{$i}
+			@extend .excerpt
+			-webkit-line-clamp: #{$i}
+
+.text-shadow
+	text-shadow: 0px 0px 1px rgb(0 0 0 / 20%), 0px 0px 1px rgb(1 0 5 / 10%)
+	&-sm
+		text-shadow: 1px 1px 3px rgb(36 37 47 / 25%)
+	&-md
+		text-shadow: 0px 1px 2px rgb(30 29 39 / 19%), 1px 2px 4px rgb(54 64 147 / 18%)
+	&-lg
+		text-shadow: 3px 3px 6px rgb(0 0 0 / 26%), 0 0 5px rgb(15 3 86 / 22%)
+	&-xl
+		text-shadow: 1px 1px 3px rgb(0 0 0 / 29%), 2px 4px 7px rgb(73 64 125 / 35%)
+	&-none
+		text-shadow: none

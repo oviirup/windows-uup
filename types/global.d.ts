@@ -1,10 +1,12 @@
 import React from 'react'
 import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextApiHandler, NextPage } from 'next'
+import type { NextSeoProps, DefaultSeoProps } from 'next-seo'
+import type { IconNames } from '../components/Icon'
 
 declare global {
 	// NextJS
 	declare namespace Next {
-		type Page = NextPage
+		type Page<P> = NextPage<P> & { id }
 		type API = NextApiHandler
 		type StaticProps = GetStaticProps
 		type StaticPaths = GetStaticPaths
@@ -17,4 +19,9 @@ declare global {
 	}
 	type Omit<Object, K extends keyof Object> = Pick<Object, Exclude<keyof Object, K>>
 	type HTML<EL = HTMLElement> = React.HTMLProps<EL> & TagProp
+	type IconNames = IconNames
+
+	// SEO Props
+	type SeoProps = NextSeoProps
+	type DefaultSeoProps = DefaultSeoProps
 }
