@@ -6,7 +6,7 @@ import type { IconNames } from '../components/Icon'
 declare global {
 	// NextJS
 	declare namespace Next {
-		type Page<P> = NextPage<P> & { id }
+		type Page<P = {}> = NextPage<P> & { id?: string }
 		type API = NextApiHandler
 		type StaticProps = GetStaticProps
 		type StaticPaths = GetStaticPaths
