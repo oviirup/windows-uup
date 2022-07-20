@@ -22,6 +22,7 @@
 	// Prettier config
 	"prettier.singleQuote": true,
 	"prettier.jsxSingleQuote": true,
+	"prettier.quoteProps": "consistent",
 	"prettier.arrowParens": "always",
 	"prettier.useTabs": true,
 	"prettier.tabWidth": 2,
