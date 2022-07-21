@@ -13,8 +13,6 @@ h4,.h4
 
 a
 	@apply text-primary cursor-pointer
-p
-	@apply mb-4
 img
 	object-fit: cover
 hr
@@ -25,7 +23,6 @@ input
 [multiple], [type=date], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], select, textarea
 	@apply px-3 py-2 rounded appearance-none
 
-
 .article-body
 	ul, ol
 		@apply list-disc mb-4
@@ -35,16 +32,17 @@ input
 .container
 	@apply max-w-xl md:max-w-3xl
 
-.excerpt
+.excerpt-1
 	overflow: hidden
 	text-overflow: ellipsis
 	display: -webkit-box
 	-webkit-box-orient: vertical
 	-webkit-line-clamp: 1
-	@for $i from 2 to 9
-		&-#{$i}
-			@extend .excerpt
-			-webkit-line-clamp: #{$i}
+	line-height: 1.75
+@for $i from 2 to 9
+	.excerpt-#{$i}
+		@extend .excerpt-1
+		-webkit-line-clamp: #{$i}
 
 .text-shadow
 	text-shadow: 0px 0px 1px rgb(0 0 0 / 20%), 0px 0px 1px rgb(1 0 5 / 10%)
