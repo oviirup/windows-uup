@@ -1,0 +1,21 @@
+@import '@/styles/components'
+
+.hero
+	@apply relative py-20 text-center
+	@apply flex flex-col flex-center
+	&_title
+		background-image: linear-gradient(45deg,#8360c3 0%,#0083e0 25%,#009ddb 50%,#00b3bd 75%,#2ebd90 100%)
+		font-size: clamp(2.5rem, 10vw,4rem)
+		@apply max-w-max drop-shadow-lg leading-[1.2]
+		@apply font-sans font-extrabold bg-clip-text text-transparent
+	&_subtitle
+		@apply mt-5 max-w-lg mx-auto text-base md:text-lg text-gray-500 leading-[2]
+
+.background_image
+	$c2: theme('colors.gray.500')
+	$w: 1.5rem
+	background: fixed 0 0 /#{$w} #{$w} radial-gradient($c2 1px, #0000 0), fixed #{$w/2} #{$w/2} /#{$w} #{$w} radial-gradient($c2 1px, #0000 0)
+	mask: linear-gradient(180deg, currentcolor 0, transparent 400px)
+	background-attachment: fixed
+	@apply absolute inset-0 top-2
+	@apply opacity-30

@@ -1,0 +1,19 @@
+@import '@/styles/components'
+
+.footer
+	@apply container-4xl p-10 pb-6
+	@apply flex justify-between
+	@apply text-gray-600 dark:text-gray-400
+
+.creator a
+	@apply inline-flex not-italic font-raleway ml-2
+
+.x_powered_by svg
+	@apply ml-1 inline align-[-3px]
+
+.nav_links
+	@apply mt-4 text-center
+	a
+		@apply link font-normal
+	> *:not(:first-of-type):before
+		content: ' • '

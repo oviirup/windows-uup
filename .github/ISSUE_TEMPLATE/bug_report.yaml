@@ -29,8 +29,8 @@ body:
       required: true
   - type: input
     attributes:
-      label: Relevent URL
-      description: Provide the url where the error occoured
+      label: Relevant URL
+      description: Provide the URL where the error occurred
       placeholder: /download
     validations:
       required: true

@@ -1,17 +1,16 @@
-/node_modules
+# repository
+node_modules
+.vercel
+.vscode
 
 # next.js
-/.next
-/out
-/.vercel
-/.swc
+.next
+.swc
 /coverage
 /build
+/out
 next-env.d.ts
 
-/public/sitemap.xml
-/public/feed.xml
-/public/robots.txt
 
 # package-lock
 package-lock.json

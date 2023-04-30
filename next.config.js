@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
-const config = {
+const nextConfig = {
 	reactStrictMode: true,
-	swcMinify: true,
+	experimental: { appDir: true },
+	compiler: { removeConsole: true },
+	webpack: (config, options) => {
+		config.module.rules.push({
+			test: /\.svg$/,
+			use: [
+				options.defaultLoaders.babel,
+				{ loader: '@svgr/webpack', options: { babel: false } },
+			],
+		})
+		return config
+	},
 }
 
-module.exports = config
+module.exports = nextConfig

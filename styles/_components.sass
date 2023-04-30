@@ -1,0 +1,27 @@
+@import 'tailwindcss/components'
+@import 'tailwindcss/utilities'
+
+@layer components
+
+	.container
+		@apply mx-auto max-w-4xl px-6 sm:px-[clamp(1.5rem,4vw,3rem)]
+	@each $w in ('2xl','3xl','4xl','5xl','6xl','7xl')
+		.container-#{$w}
+			@apply container max-w-#{$w}
+
+	.flex-center
+		@apply items-center justify-center
+
+	.button
+		@apply flex-center inline-flex
+		@apply px-2 py-1 rounded-md relative
+		@apply border border-gray-500/50
+
+	.link
+		$C: currentcolor
+		outline: none
+		background: linear-gradient($C, $C) no-repeat right 100%/0 2px
+		@apply font-semibold transition-[background-size,color]
+		&:hover, &:focus, &:active
+			background: linear-gradient($C, $C) no-repeat left 100%/100% 2px
+			@apply text-rose-600 dark:text-rose-400

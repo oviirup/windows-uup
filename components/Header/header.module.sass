@@ -1,0 +1,42 @@
+@import '@/styles/components'
+
+.header
+	@apply z-50 text-gray-700 dark:text-gray-300
+	@apply h-16 transition-[top] duration-200 sticky -top-16
+
+.title
+	@apply font-light text-gray-600 dark:text-gray-400
+	@apply z-20 transition-opacity
+
+.wrapper
+	@apply h-full container-4xl flex items-center justify-between
+
+.navigation
+	@apply relative flex flex-row-reverse sm:flex-row items-center gap-2
+
+// navigation wrapper
+.menu_wrapper
+	@apply fixed sm:relative inset-0 top-16 sm:top-0
+	@apply flex flex-col items-center	p-8 sm:p-0
+	@apply pointer-events-none sm:pointer-events-auto
+	[data-open=true] &
+		@apply pointer-events-auto
+
+.navigation
+	@apply flex items-center gap-3
+
+.repo_link
+	@apply h-10 aspect-square flex flex-center
+	@apply rounded-full bg-gray-500/10 backdrop-blur-xl
+	&:hover,&:focus,&:active
+		@apply bg-gray-500/20
+
+.theme_toggle
+	@apply relative inline-flex w-10 shrink-0 rounded-full
+	@apply text-gray-600 dark:text-gray-400 bg-gray-500/10
+	@apply border border-gray-400 dark:border-gray-700
+	@apply backdrop-blur-xl bg-gray-200/50 dark:bg-gray-800/50
+	[data-icon]
+		@apply p-[0.25rem] h-6 w-6 rounded-full -ml-px
+		@apply bg-white dark:bg-gray-900 dark:translate-x-4
+		@apply border border-inherit
