@@ -2,6 +2,7 @@
 	"name": "windows-uup",
 	"version": "1.2.0",
 	"private": true,
+	"author": "Avirup Ghosh (https://github.com/graygalaxy)",
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
