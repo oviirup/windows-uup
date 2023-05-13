@@ -2,15 +2,16 @@
 node_modules
 .vercel
 .vscode
+.turbo
 
 # next.js
 .next
 .swc
+.cache
 /coverage
 /build
 /out
 next-env.d.ts
-
 
 # package-lock
 package-lock.json
