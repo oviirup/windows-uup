@@ -1,29 +1,19 @@
 # repository
 node_modules
 .vercel
-.vscode
 .turbo
-
-# next.js
 .next
-.swc
-.cache
-/coverage
-/build
-/out
 next-env.d.ts
 
-# package-lock
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
+# temporary files
+*.temp.*
+*.bkp
 
 # debug
 *-debug.log*
 *-error.log*
 
 # local env files
-.env
 .env.local
 .env.development.local
 .env.test.local

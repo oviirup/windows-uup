@@ -1,0 +1,34 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.fixAll.eslint": "explicit"
+  },
+  // hide gitignore files
+  "explorer.excludeGitIgnore": true,
+  // file nesting
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "*.js": "${capture}.js.map, ${capture}.*.js, ${capture}.d.ts",
+    "*.tsx": "${capture}.*.tsx, ${capture}.*.ts, ${capture}.*.js"
+  },
+  // custom labels to easily navigate next.js app router
+  "workbench.editor.customLabels.enabled": true,
+  "workbench.editor.customLabels.patterns": {
+    "./app/**/{index}.{jsx,tsx}": "${dirname} - ${filename}",
+    "./components/**/{index}.{jsx,tsx}": "${dirname} - ${filename}"
+  },
+  // tailwind support for cva and classNames
+  "tailwindCSS.classAttributes": ["style", "\\w+Style"],
+  "tailwindCSS.experimental.classRegex": [
+    "tw`([^`]*)",
+    ["tw.style\\(([^)]*)\\)", "'([^']*)'"],
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  // prettier-ignore
+  "cSpell.words": [
+    "envalid","hookform","inter","tailwindcss","webp","zod",
+  ]
+}
