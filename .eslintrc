@@ -6,6 +6,9 @@
     "plugin:tailwindcss/recommended"
   ],
   "rules": {
+    "semi": "warn",
+    "prefer-arrow-callback": "warn",
+    "prefer-template": "warn",
     "eqeqeq": "warn",
     "tailwindcss/no-custom-classname": "off"
   },
@@ -14,5 +17,6 @@
       "callees": ["clsx", "cn", "cva"],
       "classRegex": "^(class|\\w+Class)Name$"
     }
-  }
+  },
+  "ignorePatterns":["*.test.*"]
 }
