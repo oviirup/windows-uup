@@ -5,15 +5,11 @@ describe('slugify', () => {
   it('should return a slug string', () => {
     expect(slugify('Hello World')).toBe('hello-world');
     expect(slugify('React is Awesome')).toBe('react-is-awesome');
-    expect(slugify('  leading and trailing spaces  ')).toBe(
-      'leading-and-trailing-spaces',
-    );
+    expect(slugify('  leading and trailing spaces  ')).toBe('leading-and-trailing-spaces');
     expect(slugify('Multiple   spaces')).toBe('multiple-spaces');
     expect(slugify('Special chars*&^%$')).toBe('special-chars');
     expect(slugify('CamelCaseString')).toBe('camel-case-string');
-    expect(slugify('Accented characters àéîôü')).toBe(
-      'accented-characters-àéîôü',
-    );
+    expect(slugify('Accented characters àéîôü')).toBe('accented-characters-àéîôü');
   });
 
   it('should handle strings with special characters', () => {

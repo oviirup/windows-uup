@@ -1,12 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  isArray,
-  isEmpty,
-  isEmptyArray,
-  isEmptyObject,
-  isFunction,
-  isObject,
-} from './assertions';
+import { isArray, isEmpty, isEmptyArray, isEmptyObject, isFunction, isObject } from './assertions';
 
 // Adjust the path as needed
 
