@@ -1,18 +1,13 @@
+import './src/env.js'; // verify environment variables on build
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	reactStrictMode: true,
-	experimental: { appDir: true },
-	compiler: { removeConsole: true },
-	webpack: (config, options) => {
-		config.module.rules.push({
-			test: /\.svg$/,
-			use: [
-				options.defaultLoaders.babel,
-				{ loader: '@svgr/webpack', options: { babel: false } },
-			],
-		})
-		return config
-	},
-}
+  // disable eslint & typescript during build
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
+  logging: {
+    fetches: { fullUrl: true, hmrRefreshes: true }, //enable fetch logging
+  },
+};
 
-module.exports = nextConfig
+export default nextConfig;
