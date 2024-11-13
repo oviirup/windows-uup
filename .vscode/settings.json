@@ -4,6 +4,8 @@
     "source.organizeImports": "never",
     "source.fixAll.eslint": "explicit"
   },
+  "css.validate": false,
+  "scss.validate": false,
   // file nesting
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
