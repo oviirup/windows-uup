@@ -30,6 +30,6 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   // prettier-ignore
   "cSpell.words": [
-    "envalid","hookform","inter","tailwindcss","webp","zod",
+    "envalid","hookform","inter","tailwindcss","webp","zod","pluggables"
   ]
 }

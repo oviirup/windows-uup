@@ -1,5 +1,4 @@
-import twAnimate from '@oviirup/tailwindcss-animate';
-import racPlugin from 'tailwindcss-react-aria-components';
+import pluggables from 'tailwindcss-pluggables';
 import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
@@ -69,22 +68,7 @@ const tailwindConfig = {
     },
   },
   plugins: [
-    twAnimate,
-    racPlugin,
-    // prettier-ignore
-    plugin(({ addVariant, matchVariant }) => {
-      addVariant('hocus', ['&:hover', '&:focus-visible']);
-      // parent selector
-      matchVariant('group', (_, { modifier: m }) => {
-        const b = m ? `group\\/${e(m)}` : `group`;
-        return [`:merge(.${b}):hover &`, `:merge(.${b}):focus-visible &`];
-      }, { values: { hocus: 'hocus' } });
-      // peer selector
-      matchVariant('peer', (_, { modifier: m }) => {
-        const b = m ? `peer\\/${e(m)}` : `peer`;
-        return [`:merge(.${b}):hover ~ &`, `:merge(.${b}):focus-visible ~ &`];
-      }, { values: { hocus: 'hocus' } });
-    }),
+    ...pluggables(),
     // miscellaneous
     plugin(({ addUtilities }) => {
       addUtilities({

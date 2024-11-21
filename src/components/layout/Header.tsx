@@ -9,9 +9,11 @@ export function Header() {
   const { theme, setTheme } = useTheme();
   const [isDarkMode, setIsDarkMode] = React.useState(DEFAULT_THEME === 'dark');
 
-  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  const toggleTheme = (checked: boolean) => {
+    setTheme(checked ? 'dark' : 'light');
+  };
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     setIsDarkMode(theme === 'dark');
   }, [theme]);
 
@@ -28,7 +30,7 @@ export function Header() {
         <div className="ml-auto flex gap-3">
           <label className="inline-flex cursor-pointer items-center gap-2.5 text-muted-fg">
             <Icon name={isDarkMode ? 'moon' : 'sun'} size={18} />
-            <Switch isSelected={isDarkMode} onChange={toggleTheme} aria-label="toggle theme" />
+            <Switch checked={isDarkMode} onCheckedChange={toggleTheme} aria-label="toggle theme" />
           </label>
         </div>
       </div>
