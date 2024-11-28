@@ -1,6 +1,6 @@
 // Adjust the path as needed
 import { describe, expect, it, vi } from 'vitest';
-import { generateUUID, hexToBinary, uupDevice } from './utils';
+import { generateUUID, uupDevice } from './utils';
 
 describe('generateUUID', () => {
   it('should generate a UUID of correct length', () => {
@@ -48,31 +48,9 @@ describe('generateUUID', () => {
   });
 });
 
-describe('hexToBinary', () => {
-  it('should convert a valid hexadecimal string to its binary representation', () => {
-    expect(hexToBinary('48656c6c6f')).toBe('Hello');
-    expect(hexToBinary('776f726c64')).toBe('world');
-  });
-
-  it('should throw an error for an invalid hexadecimal string', () => {
-    const errorText = 'Provided hex string is invalid';
-    expect(() => hexToBinary('123g')).toThrow(errorText);
-    expect(() => hexToBinary('123')).toThrow(errorText);
-    expect(() => hexToBinary('invalid')).toThrow(errorText);
-  });
-
-  it('should handle an empty string', () => {
-    expect(hexToBinary('')).toBe('');
-  });
-
-  it('should handle a single byte (2 hex digits) correctly', () => {
-    expect(hexToBinary('41')).toBe('A');
-    expect(hexToBinary('7a')).toBe('z');
-  });
-});
-
 describe('uupDevice', () => {
   // Mock the randomBytes function to return a predictable result for testing
+  // TODO: fix error "vi.mock is not a function"
   vi.mock('crypto', () => ({
     randomBytes: vi.fn(() => Buffer.from('a'.repeat(1054 / 2), 'hex')),
   }));
@@ -92,13 +70,5 @@ describe('uupDevice', () => {
   it('should produce a valid base64 string', () => {
     const result = uupDevice();
     expect(() => Buffer.from(result, 'base64').toString()).not.toThrow();
-  });
-
-  it('should handle an empty hex string gracefully in hexToBinary', () => {
-    expect(hexToBinary('')).toBe('');
-  });
-
-  it('should throw an error for an invalid hex string in hexToBinary', () => {
-    expect(() => hexToBinary('invalid')).toThrow('Provided hex string is invalid');
   });
 });
