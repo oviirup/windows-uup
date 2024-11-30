@@ -1,4 +1,4 @@
-import { ALLOWED_BRANCHES } from '@/lib/uup/const';
+import { ALLOWED_BRANCHES } from '@/uup/const';
 import { z } from 'zod';
 
 // prettier-ignore
@@ -77,3 +77,19 @@ export const zRequestParams = z
   });
 
 export type RequestParams = z.infer<typeof zRequestParams>;
+
+export const zBuildVersion = z
+  .string()
+  .regex(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/, { message: 'INVALID_BUILD_VERSION' })
+  .transform((val) => {
+    const match = val.match(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/);
+    if (!match) {
+      throw new Error('INVALID_BUILD_VERSION');
+    }
+    const [, vWin, vWinMinor, build, minor = 0] = match;
+    return {
+      build: `${vWin}.${vWinMinor}.${build}`,
+      major: parseInt(build),
+      minor: minor ? parseInt(minor) : 0,
+    };
+  });

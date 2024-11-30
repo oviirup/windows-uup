@@ -1,4 +1,6 @@
 import { randomBytes } from 'crypto';
+import { BRANCH_MAP } from '@/uup/const';
+import { zBuildVersion } from '@/uup/schema';
 
 /** Generate random uuid */
 export function generateUUID() {
@@ -23,4 +25,13 @@ export function uupDevice() {
 
   const segments = `${data.split('').join('\0')}\0`;
   return Buffer.from(segments).toString('base64');
+}
+
+export function getBranchFromBuild(build: string) {
+  const parsedBuild = zBuildVersion.safeParse(build);
+  if (!parsedBuild.success) {
+    throw new Error(parsedBuild.error.message);
+  }
+  const { major } = parsedBuild.data;
+  return major in BRANCH_MAP ? BRANCH_MAP[major as keyof typeof BRANCH_MAP] : 'rs_prerelease';
 }
