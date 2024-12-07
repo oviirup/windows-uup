@@ -1,5 +1,5 @@
-import { ALLOWED_BRANCHES } from '@/uup/const';
 import { z } from 'zod';
+import { ALLOWED_BRANCHES } from './const';
 
 // prettier-ignore
 const RING = ['CANARY','DEV','BETA','RELEASEPREVIEW','WIF','WIS','RP','RETAIL','MSIT'] as const;
@@ -12,7 +12,7 @@ export const zRequestParams = z
     /** Target Architecture (amd64, arm64, x86 ...). */
     arch: z
       .string()
-      .refine((val) => ARCH.includes(val.toLowerCase() as any), { message: 'UNKNOWN_ARCH' })
+      .refine((val) => ARCH.includes(val.toLowerCase() as any), { message: 'invalid arch' })
       .default('amd64')
       .transform((val) => {
         const arch = val.toLowerCase();
@@ -23,36 +23,21 @@ export const zRequestParams = z
           default: return arch;
         }
       }),
-
     /** Update Ring ('CANARY', 'DEV', 'BETA' ...) */
-    ring: z
-      .enum(RING, { message: 'UNKNOWN_RING' })
-      .default('WIF')
-      .transform((val) => {
-        // prettier-ignore
-        switch (val) {
-          case 'DEV': return 'WIF';
-          case 'BETA': return 'WIS';
-          case 'RELEASEPREVIEW': return 'RP';
-          default: return val;
-        }
-      }),
-
+    ring: z.enum(RING, { message: 'invalid ring' }).default('WIF'),
     /** Update flight */
-    flight: z.enum(FLIGHT, { message: 'UNKNOWN_FLIGHT' }).default('Active'),
+    flight: z.enum(FLIGHT, { message: 'invalid flight' }).default('Active'),
 
     /** Update build version */
     build: z
       .string()
       .default('latest')
-      .refine((val) => val === 'latest' || z.coerce.number().min(9841).safeParse(val.split('.')[0]).success, {
-        message: 'UNKNOWN_BUILD',
-      }),
+      .refine((val) => val === 'latest' || zBuildVersion.safeParse(val).success, { message: 'invalid build' }),
 
     /** Update branch (ge_release, zn_release ...) */
     branch: z
       .string()
-      .default('ge_release')
+      .default('auto')
       .transform((val) => {
         return ALLOWED_BRANCHES.includes(val.toLowerCase()) ? val : 'auto';
       }),
@@ -61,14 +46,14 @@ export const zRequestParams = z
     sku: z.coerce.number().int().positive().default(48),
 
     /** Update type (Production,Test) */
-    type: z.enum(TYPE, { message: 'UNKNOWN_TYPE' }).default('Production'),
+    type: z.enum(TYPE, { message: 'unknown type' }).default('Production'),
 
     /** Update Flags */
-    flags: z.array(z.string()).default([]).optional(),
+    flags: z.array(z.string()).default([]),
   })
   .transform((val, ctx) => {
-    if (!(val.flight === 'Skip' && val.ring !== 'WIF')) {
-      ctx.addIssue({ code: 'custom', message: 'UNKNOWN_COMBINATION', path: ['flight', 'ring'] });
+    if (val.flight === 'Skip' && val.ring !== 'WIF') {
+      ctx.addIssue({ code: 'custom', message: 'incomparable flight and ring ', path: ['flight'] });
     }
     if (val.flight === 'Active' && val.ring === 'RP') {
       val.flight = 'Current';
@@ -80,16 +65,23 @@ export type RequestParams = z.infer<typeof zRequestParams>;
 
 export const zBuildVersion = z
   .string()
-  .regex(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/, { message: 'INVALID_BUILD_VERSION' })
-  .transform((val) => {
-    const match = val.match(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/);
-    if (!match) {
-      throw new Error('INVALID_BUILD_VERSION');
-    }
-    const [, vWin, vWinMinor, build, minor = 0] = match;
+  .regex(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/, { message: 'invalid build version' })
+  .transform((val, ctx) => {
+    const match = val.match(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/)!;
+    const [, vWin, vWinMinor, vMajor, vMinor = 0] = match;
+    const zNonnegativeInt = z.coerce.number({ message: 'must be a positive number' }).int().nonnegative();
+
+    const major = zNonnegativeInt.min(9841, { message: 'invalid build version' }).safeParse(vMajor);
+    if (major.error) ctx.addIssue(major.error.issues[0]);
+
+    const minor = zNonnegativeInt.min(0, { message: 'invalid minor version' }).default(0).safeParse(vMinor);
+    if (minor.error) ctx.addIssue(minor.error.issues[0]);
+
     return {
-      build: `${vWin}.${vWinMinor}.${build}`,
-      major: parseInt(build),
-      minor: minor ? parseInt(minor) : 0,
+      build: `${vWin}.${vWinMinor}.${vMajor}`,
+      vMajor: major.data!,
+      vMinor: minor.data!,
     };
   });
+
+export type BuildVersion = z.infer<typeof zBuildVersion>;
