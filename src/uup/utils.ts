@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
-import { BRANCH_MAP } from '@/uup/const';
-import { zBuildVersion } from '@/uup/schema';
+import { BRANCH_MAP } from './const';
+import { BuildVersion, zBuildVersion } from './schema';
 
 /** Generate random uuid */
 export function generateUUID() {
@@ -27,11 +27,20 @@ export function uupDevice() {
   return Buffer.from(segments).toString('base64');
 }
 
-export function getBranchFromBuild(build: string) {
-  const parsedBuild = zBuildVersion.safeParse(build);
-  if (!parsedBuild.success) {
-    throw new Error(parsedBuild.error.message);
+export function getBranchFromBuild(build: string | BuildVersion) {
+  let buildVersion: BuildVersion;
+  if (typeof build === 'string') {
+    const parsedBuild = zBuildVersion.safeParse(build);
+    if (!parsedBuild.success) {
+      throw new Error(parsedBuild.error.message);
+    }
+    buildVersion = parsedBuild.data;
+  } else if (typeof build === 'object' && Object.hasOwn(build, 'build')) {
+    buildVersion = build;
+  } else {
+    throw new Error('invalid build version');
   }
-  const { major } = parsedBuild.data;
-  return major in BRANCH_MAP ? BRANCH_MAP[major as keyof typeof BRANCH_MAP] : 'rs_prerelease';
+
+  const { vMajor } = buildVersion;
+  return vMajor in BRANCH_MAP ? BRANCH_MAP[vMajor as keyof typeof BRANCH_MAP] : 'rs_prerelease';
 }
