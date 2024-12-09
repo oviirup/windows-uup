@@ -36,3 +36,10 @@ export const BRANCH_MAP = {
   25398: 'zn_release',
   26100: 'ge_release',
 } as const;
+
+export const SKU_MAP = {
+  blocked: [125, 126],
+  core: [180, 184, 189],
+  team: [119],
+  server: [7, 8, 12, 13, 79, 80, 120, 145, 146, 147, 148, 159, 160, 406, 407, 408],
+};

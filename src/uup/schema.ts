@@ -3,26 +3,31 @@ import { ALLOWED_BRANCHES } from './const';
 
 // prettier-ignore
 const RING = ['CANARY','DEV','BETA','RELEASEPREVIEW','WIF','WIS','RP','RETAIL','MSIT'] as const;
-const ARCH = ['x86', 'x64', 'amd64', 'arm', 'arm64', 'all'] as const;
+const ARCH = ['x86', 'amd64', 'arm', 'arm64'] as const;
 const FLIGHT = ['Mainline', 'Active', 'Skip', 'Current'] as const;
 const TYPE = ['Production', 'Test'] as const;
+
+export const zArch = z
+  .union([z.string(), z.array(z.string())], { message: 'invalid arch' })
+  .default('amd64')
+  .transform((val, ctx) => {
+    const inputArches = val === 'all' ? ARCH : Array.isArray(val) ? val : [val];
+    const arches = new Set<(typeof ARCH)[number]>();
+    for (const i in inputArches) {
+      let arch = inputArches[i].toLowerCase() as (typeof ARCH)[number];
+      if (!ARCH.includes(arch)) {
+        ctx.addIssue({ code: 'custom', message: `invalid arch: ${arch}` });
+        break;
+      }
+      arches.add(arch);
+    }
+    return Array.from(arches);
+  });
 
 export const zRequestParams = z
   .object({
     /** Target Architecture (amd64, arm64, x86 ...). */
-    arch: z
-      .string()
-      .refine((val) => ARCH.includes(val.toLowerCase() as any), { message: 'invalid arch' })
-      .default('amd64')
-      .transform((val) => {
-        const arch = val.toLowerCase();
-        // prettier-ignore
-        switch (arch) {
-          case 'x64': return 'amd64';
-          case 'arm': return 'arm64';
-          default: return arch;
-        }
-      }),
+    arch: zArch,
     /** Update Ring ('CANARY', 'DEV', 'BETA' ...) */
     ring: z.enum(RING, { message: 'invalid ring' }).default('WIF'),
     /** Update flight */

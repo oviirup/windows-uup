@@ -4,6 +4,7 @@ node_modules
 .vercel
 .turbo
 .next
+tsconfig.tsbuildinfo
 next-env.d.ts
 
 # temporary files
