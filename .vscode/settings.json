@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  "explorer.sortOrder": "type",
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never",
     "source.fixAll.eslint": "explicit"
@@ -10,7 +11,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "package.json": ".nvmrc, .npm*, bun.lockb, .prettier*, .editorconfig",
+    "package.json": ".nvmrc, .npm*, bun.lockb",
     "*.js": "${capture}.js.map, ${capture}.*.js, ${capture}.d.ts",
     "*.ts": "${capture}.js.map, ${capture}.*.ts, ${capture}.*.js, ${capture}.d.ts",
     "*.tsx": "${capture}.*.tsx, ${capture}.*.ts, ${capture}.*.js"

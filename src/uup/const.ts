@@ -1,3 +1,7 @@
+import path from 'path';
+
+export const UUP_STORE_PATH = path.resolve('.uup');
+
 // prettier-ignore
 export const ALLOWED_BRANCHES = [
   'auto','rs2_release','rs3_release','rs4_release','rs5_release','rs5_release_svc_hci','19h1_release','vb_release',

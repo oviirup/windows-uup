@@ -85,3 +85,16 @@ export const zBuildVersion = z
   });
 
 export type BuildVersion = z.infer<typeof zBuildVersion>;
+
+export const zCookieData = z.object({
+  data: z
+    .string({ message: 'invalid cookie data' })
+    .regex(/^[-A-Za-z0-9+/=]|=[^=]|={3,}$/, { message: 'invalid cookie data' })
+    .min(1, { message: 'cookie data is required' }),
+  expires: z
+    .string({ message: 'invalid expiry date' })
+    .datetime({ message: 'invalid expiry date' })
+    .min(1, { message: 'expiry date is required' }),
+});
+
+export type CookieData = z.infer<typeof zCookieData>;
