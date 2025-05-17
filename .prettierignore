@@ -1,2 +1,9 @@
 public/**/*
-.*rc
+*.min.*
+
+# package lock files
+pnpm-lock.yaml
+package-lock.json
+bun.lock
+yarn.lock
+

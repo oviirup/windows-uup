@@ -1,0 +1,3 @@
+# After checking out a branch (or after cloning the repo),
+# ensure all Git submodules are initialized and updated.
+git submodule update --init --recursive

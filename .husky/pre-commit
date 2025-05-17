@@ -1,0 +1,2 @@
+# Run lint-staged to automatically lint files before committing.
+pnpm lint-staged

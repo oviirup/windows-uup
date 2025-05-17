@@ -4,12 +4,12 @@ node_modules
 .vercel
 .turbo
 .next
-tsconfig.tsbuildinfo
 next-env.d.ts
 
 # temporary files
 *.temp.*
 *.bkp
+*.tsbuildinfo
 
 # debug
 *-debug.log*
@@ -18,3 +18,7 @@ next-env.d.ts
 # local env files
 .env*
 !.env.example
+
+# miscellaneous
+public/*.sprite.svg
+public/static
