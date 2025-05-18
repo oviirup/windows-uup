@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://uup.vercel.app/sitemap.xml/

@@ -1,15 +1,16 @@
-import { Footer, Header } from '@/components/layout';
-import { cn } from '@/components/utils';
-import { DEFAULT_THEME } from '@/const';
-import { inter, raleway } from '@/styles/fonts';
-import '@/styles/globals.scss';
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from 'next-themes'
+import { Footer } from '@/components/layout/footer'
+import { Header } from '@/components/layout/header'
+import { cn } from '@/lib/utils'
+import { code, heading, sans } from '@/styles/fonts'
+import '@/styles/globals.css'
 
 export default function RootLayout({ children }: Props) {
+  const fonts = [sans.className, sans.variable, heading.variable, code.variable]
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.className, raleway.variable, 'flex')}>
-        <ThemeProvider defaultTheme={DEFAULT_THEME} disableTransitionOnChange>
+      <body className={cn(fonts, 'flex min-h-svh flex-col antialiased')}>
+        <ThemeProvider enableSystem disableTransitionOnChange>
           <aside className="__background_dot_grid" aria-hidden />
           <Header />
           <div className="relative flex max-w-full grow">{children}</div>
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: Props) {
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
 
-export { metadata, viewport } from './metadata';
+export { metadata, viewport } from './metadata'

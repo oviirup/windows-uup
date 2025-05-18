@@ -17,8 +17,6 @@ export const SITE_URL = isDev
 
 export const SOURCE = 'https://github.com/oviirup/windows-uup'
 
-export const DEFAULT_THEME = 'dark'
-
 export const CREATOR = {
   name: 'Avirup Ghosh',
   profiles: {
