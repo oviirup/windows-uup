@@ -29,6 +29,7 @@
     "@radix-ui/react-select": "~2.2.4",
     "@radix-ui/react-slot": "~1.2.2",
     "@radix-ui/react-switch": "~1.2.4",
+    "@radix-ui/react-tooltip": "~1.2.6",
     "class-variance-authority": "~0.7.1",
     "dotenv": "~16.5.0",
     "feed": "~5.0.1",
