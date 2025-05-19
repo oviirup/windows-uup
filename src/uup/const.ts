@@ -1,6 +1,6 @@
-import path from 'path';
+import path from 'path'
 
-export const UUP_STORE_PATH = path.resolve('.uup');
+export const UUP_STORE_PATH = path.resolve('.uup')
 
 // prettier-ignore
 export const ALLOWED_BRANCHES = [
@@ -11,7 +11,7 @@ export const ALLOWED_BRANCHES = [
 export const API_ENDPOINTS = {
   client: `https://fe3.delivery.mp.microsoft.com/ClientWebService/client.asmx`,
   secured: `https://fe3cr.delivery.mp.microsoft.com/ClientWebService/client.asmx/secured`,
-} as const;
+} as const
 
 export const BRANCH_MAP = {
   15063: 'rs2_release',
@@ -35,11 +35,13 @@ export const BRANCH_MAP = {
   22631: 'ni_release',
   25398: 'zn_release',
   26100: 'ge_release',
-} as const;
+} as const
 
 export const SKU_MAP = {
   blocked: [125, 126],
   core: [180, 184, 189],
   team: [119],
-  server: [7, 8, 12, 13, 79, 80, 120, 145, 146, 147, 148, 159, 160, 406, 407, 408],
-};
+  server: [
+    7, 8, 12, 13, 79, 80, 120, 145, 146, 147, 148, 159, 160, 406, 407, 408,
+  ],
+}

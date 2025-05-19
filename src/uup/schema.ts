@@ -1,28 +1,28 @@
-import { z } from 'zod';
-import { ALLOWED_BRANCHES } from './const';
+import { z } from 'zod'
+import { ALLOWED_BRANCHES } from './const'
 
 // prettier-ignore
 const RING = ['CANARY','DEV','BETA','RELEASEPREVIEW','WIF','WIS','RP','RETAIL','MSIT'] as const;
-const ARCH = ['x86', 'amd64', 'arm', 'arm64'] as const;
-const FLIGHT = ['Mainline', 'Active', 'Skip', 'Current'] as const;
-const TYPE = ['Production', 'Test'] as const;
+const ARCH = ['x86', 'amd64', 'arm', 'arm64'] as const
+const FLIGHT = ['Mainline', 'Active', 'Skip', 'Current'] as const
+const TYPE = ['Production', 'Test'] as const
 
 export const zArch = z
   .union([z.string(), z.array(z.string())], { message: 'invalid arch' })
   .default('amd64')
   .transform((val, ctx) => {
-    const inputArches = val === 'all' ? ARCH : Array.isArray(val) ? val : [val];
-    const arches = new Set<(typeof ARCH)[number]>();
+    const inputArches = val === 'all' ? ARCH : Array.isArray(val) ? val : [val]
+    const arches = new Set<(typeof ARCH)[number]>()
     for (const i in inputArches) {
-      let arch = inputArches[i].toLowerCase() as (typeof ARCH)[number];
+      const arch = inputArches[i].toLowerCase() as (typeof ARCH)[number]
       if (!ARCH.includes(arch)) {
-        ctx.addIssue({ code: 'custom', message: `invalid arch: ${arch}` });
-        break;
+        ctx.addIssue({ code: 'custom', message: `invalid arch: ${arch}` })
+        break
       }
-      arches.add(arch);
+      arches.add(arch)
     }
-    return Array.from(arches);
-  });
+    return Array.from(arches)
+  })
 
 export const zRequestParams = z
   .object({
@@ -37,14 +37,17 @@ export const zRequestParams = z
     build: z
       .string()
       .default('latest')
-      .refine((val) => val === 'latest' || zBuildVersion.safeParse(val).success, { message: 'invalid build' }),
+      .refine(
+        (val) => val === 'latest' || zBuildVersion.safeParse(val).success,
+        { message: 'invalid build' },
+      ),
 
     /** Update branch (ge_release, zn_release ...) */
     branch: z
       .string()
       .default('auto')
       .transform((val) => {
-        return ALLOWED_BRANCHES.includes(val.toLowerCase()) ? val : 'auto';
+        return ALLOWED_BRANCHES.includes(val.toLowerCase()) ? val : 'auto'
       }),
 
     /** Product SKU */
@@ -58,38 +61,52 @@ export const zRequestParams = z
   })
   .transform((val, ctx) => {
     if (val.flight === 'Skip' && val.ring !== 'WIF') {
-      ctx.addIssue({ code: 'custom', message: 'incomparable flight and ring ', path: ['flight'] });
+      ctx.addIssue({
+        code: 'custom',
+        message: 'incomparable flight and ring ',
+        path: ['flight'],
+      })
     }
     if (val.flight === 'Active' && val.ring === 'RP') {
-      val.flight = 'Current';
+      val.flight = 'Current'
     }
-    return val;
-  });
+    return val
+  })
 
-export type RequestParams = z.infer<typeof zRequestParams>;
+export type RequestParams = z.infer<typeof zRequestParams>
 
 export const zBuildVersion = z
   .string()
-  .regex(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/, { message: 'invalid build version' })
+  .regex(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/, {
+    message: 'invalid build version',
+  })
   .transform((val, ctx) => {
-    const match = val.match(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/)!;
-    const [, vWin, vWinMinor, vMajor, vMinor = 0] = match;
-    const zNonnegativeInt = z.coerce.number({ message: 'must be a positive number' }).int().nonnegative();
+    const match = val.match(/^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/)!
+    const [, vWin, vWinMinor, vMajor, vMinor = 0] = match
+    const zNonnegativeInt = z.coerce
+      .number({ message: 'must be a positive number' })
+      .int()
+      .nonnegative()
 
-    const major = zNonnegativeInt.min(9841, { message: 'invalid build version' }).safeParse(vMajor);
-    if (major.error) ctx.addIssue(major.error.issues[0]);
+    const major = zNonnegativeInt
+      .min(9841, { message: 'invalid build version' })
+      .safeParse(vMajor)
+    if (major.error) ctx.addIssue(major.error.issues[0])
 
-    const minor = zNonnegativeInt.min(0, { message: 'invalid minor version' }).default(0).safeParse(vMinor);
-    if (minor.error) ctx.addIssue(minor.error.issues[0]);
+    const minor = zNonnegativeInt
+      .min(0, { message: 'invalid minor version' })
+      .default(0)
+      .safeParse(vMinor)
+    if (minor.error) ctx.addIssue(minor.error.issues[0])
 
     return {
       build: `${vWin}.${vWinMinor}.${vMajor}`,
       vMajor: major.data!,
       vMinor: minor.data!,
-    };
-  });
+    }
+  })
 
-export type BuildVersion = z.infer<typeof zBuildVersion>;
+export type BuildVersion = z.infer<typeof zBuildVersion>
 
 export const zCookieData = z.object({
   data: z
@@ -100,6 +117,6 @@ export const zCookieData = z.object({
     .string({ message: 'invalid expiry date' })
     .datetime({ message: 'invalid expiry date' })
     .min(1, { message: 'expiry date is required' }),
-});
+})
 
-export type CookieData = z.infer<typeof zCookieData>;
+export type CookieData = z.infer<typeof zCookieData>
