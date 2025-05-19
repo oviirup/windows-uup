@@ -2,9 +2,13 @@
   "$schema": "https://json.schemastore.org/prettierrc.json",
   "arrowParens": "always",
   "bracketSameLine": true,
+  "endOfLine": "lf",
   "importOrder": [
-    "^(react|next).*",
+    "<BUILTIN_MODULES>",
+    "^(react/(.*)$)|^(react$)",
+    "^(next/(.*)$)|^(next$)",
     "<THIRD_PARTY_MODULES>",
+    "^@/(.*)$",
     "^[./]",
     "<TYPES>"
   ],
@@ -14,8 +18,12 @@
     "prettier-plugin-jsdoc",
     "prettier-plugin-tailwindcss"
   ],
-  "printWidth": 120,
+  "printWidth": 80,
   "quoteProps": "consistent",
-  "tailwindFunctions": ["clsx", "cn"],
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "tailwindFunctions": ["clsx", "cn", "cva"],
+  "tailwindStylesheet": "src/styles/globals.css",
   "trailingComma": "all"
 }

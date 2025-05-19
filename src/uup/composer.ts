@@ -1,23 +1,23 @@
-import { SKU_MAP } from './const';
-import { getCookie } from './request';
-import { RequestParams, zBuildVersion } from './schema';
-import { generateUUID, getBranchFromBuild, uupDevice } from './utils';
+import uuid from '@/lib/uuid'
+import { SKU_MAP } from './const'
+import { getCookie } from './request'
+import { RequestParams, zBuildVersion } from './schema'
+import { getBranchFromBuild, uupDevice } from './utils'
 
 /** Creates the POST body for getting cookie */
 export function composeCookieRequest() {
-  const device = uupDevice();
-  const uuid = generateUUID();
+  const device = uupDevice()
+  const messageId = uuid()
 
-  const now = Date.now();
-  const timeCreated = new Date(now).toISOString();
-  const timeExpires = new Date(now + 120_1000).toISOString();
-  const timeCookieExpires = new Date(now + 604_800_1000).toISOString();
+  const now = Date.now()
+  const timeCreated = new Date(now).toISOString() // current time
+  const timeExpires = new Date(now + 120_000).toISOString() // 2 min in future
 
   return `
   <s:Envelope xmlns:a="http://www.w3.org/2005/08/addressing" xmlns:s="http://www.w3.org/2003/05/soap-envelope">
     <s:Header>
       <a:Action s:mustUnderstand="1">http://www.microsoft.com/SoftwareDistribution/Server/ClientWebService/GetCookie</a:Action>
-      <a:MessageID>urn:uuid:${uuid}</a:MessageID>
+      <a:MessageID>urn:uuid:${messageId}</a:MessageID>
       <a:To s:mustUnderstand="1">https://fe3.delivery.mp.microsoft.com/ClientWebService/client.asmx</a:To>
       <o:Security s:mustUnderstand="1" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
         <Timestamp xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
@@ -41,7 +41,7 @@ export function composeCookieRequest() {
         <protocolVersion>2.0</protocolVersion>
       </GetCookie>
     </s:Body>
-  </s:Envelope>`;
+  </s:Envelope>`
 }
 
 /** Creates the device attributes from request params */
@@ -55,84 +55,84 @@ export function composeDeviceAttributes({
   type,
 }: RequestParams) {
   if (branch === 'auto') {
-    branch = getBranchFromBuild(build);
+    branch = getBranchFromBuild(build)
   }
 
-  let blockUpgrades = 0;
-  let isRetail = 0;
-  let dvcFamily = 'Windows.Desktop';
-  let insType = 'Client';
-  let prodType = 'WinNT';
+  let blockUpgrades = 0
+  let isRetail = 0
+  let dvcFamily = 'Windows.Desktop'
+  let insType = 'Client'
+  let prodType = 'WinNT'
 
-  let flight = 'Active';
-  let flightEnabled = 1;
-  let flightBranch = '';
-  let flightContent = 'Mainline';
-  let flightRing = 'External';
+  let flight = 'Active'
+  let flightEnabled = 1
+  let flightBranch = ''
+  let flightContent = 'Mainline'
+  let flightRing = 'External'
 
   // process sku ..........
   if (SKU_MAP.blocked.includes(sku)) {
-    blockUpgrades = 1;
+    blockUpgrades = 1
   } else if (SKU_MAP.team.includes(sku)) {
-    dvcFamily = 'Windows.Team';
+    dvcFamily = 'Windows.Team'
   } else if (SKU_MAP.server.includes(sku)) {
-    dvcFamily = 'Windows.Server';
-    insType = 'Server';
-    prodType = 'ServerNT';
-    blockUpgrades = 1;
+    dvcFamily = 'Windows.Server'
+    insType = 'Server'
+    prodType = 'ServerNT'
+    blockUpgrades = 1
   } else if (SKU_MAP.core.includes(sku)) {
-    dvcFamily = 'Windows.Core';
-    insType = 'FactoryOS';
+    dvcFamily = 'Windows.Core'
+    insType = 'FactoryOS'
   }
 
   // process ring ..........
   if (ring === 'RETAIL') {
-    flightContent = flight;
-    flightRing = 'Retail';
-    flightEnabled = 0;
-    isRetail = 1;
+    flightContent = flight
+    flightRing = 'Retail'
+    flightEnabled = 0
+    isRetail = 1
   } else if (ring === 'WIF') {
-    flightBranch = 'Dev';
+    flightBranch = 'Dev'
   } else if (ring === 'WIS') {
-    flightBranch = 'Beta';
+    flightBranch = 'Beta'
   } else if (ring === 'RP') {
-    flightBranch = 'ReleasePreview';
+    flightBranch = 'ReleasePreview'
   } else if (ring === 'DEV') {
-    flightBranch = 'Dev';
-    ring = 'WIF';
+    flightBranch = 'Dev'
+    ring = 'WIF'
   } else if (ring === 'BETA') {
-    flightBranch = 'Beta';
-    ring = 'WIS';
+    flightBranch = 'Beta'
+    ring = 'WIS'
   } else if (ring === 'RELEASEPREVIEW') {
-    flightBranch = 'ReleasePreview';
-    ring = 'RP';
+    flightBranch = 'ReleasePreview'
+    ring = 'RP'
   } else if (ring === 'MSIT') {
-    flightBranch = 'MSIT';
-    flightRing = 'Internal';
+    flightBranch = 'MSIT'
+    flightRing = 'Internal'
   } else if (ring === 'CANARY') {
-    flightBranch = 'CanaryChannel';
-    ring = 'WIF';
+    flightBranch = 'CanaryChannel'
+    ring = 'WIF'
   }
 
   // process build version ..........
-  const parsedBuild = zBuildVersion.safeParse(build);
+  const parsedBuild = zBuildVersion.safeParse(build)
   if (!parsedBuild.success) {
-    throw new Error(parsedBuild.error.message);
+    throw new Error(parsedBuild.error.message)
   }
-  const { vMajor, vMinor } = parsedBuild.data;
+  const { vMajor, vMinor } = parsedBuild.data
 
   if (vMajor < 17763) {
     if (ring === 'RP') {
-      flight = 'Current';
+      flight = 'Current'
     }
-    flightBranch = 'external';
-    flightContent = flight;
-    flightRing = ring;
+    flightBranch = 'external'
+    flightContent = flight
+    flightRing = ring
   }
 
-  const now = Math.floor(Date.now() / 1000);
-  const timeCreated = now - 3600;
-  const timeExpiry = now + 82800;
+  const now = Math.floor(Date.now() / 1000)
+  const timeCreated = now - 3600 // 1 hr in the past (seconds)
+  const timeExpiry = now + 82800 // 23 hrs from now (seconds)
 
   const deviceAttribute = [
     'App=WU_OS',
@@ -251,16 +251,16 @@ export function composeDeviceAttributes({
     'VBSState=2',
     'Version_RS5=2000000000',
     `WuClientVer=${build}`,
-  ];
+  ]
 
   if (flags?.includes('thisonly')) {
-    deviceAttribute.push(`MediaBranch=${branch}`);
+    deviceAttribute.push(`MediaBranch=${branch}`)
   }
   if (flags?.includes('corpnet')) {
-    deviceAttribute.push('DUInternal=1');
+    deviceAttribute.push('DUInternal=1')
   }
 
-  return encodeURIComponent(`E:${deviceAttribute.join('&')}`);
+  return encodeURIComponent(`E:${deviceAttribute.join('&')}`)
 }
 
 /** Create post body to fetch latest windows update info */
@@ -274,37 +274,37 @@ export async function composeFetchUpdateRequest({
   sku = 48,
   type = 'Production',
 }: RequestParams) {
-  const cookie = await getCookie();
+  const cookie = await getCookie()
 
   if (!cookie?.data) {
-    return null;
+    return null
   }
 
-  const device = uupDevice();
-  const uuid = generateUUID();
+  const device = uupDevice()
+  const messageId = uuid()
 
-  const now = Date.now();
-  const timeCreated = new Date(now).toISOString();
-  const timeExpires = new Date(now + 120_000).toISOString();
+  const now = Date.now()
+  const timeCreated = new Date(now).toISOString()
+  const timeExpires = new Date(now + 120_000).toISOString()
 
   if (branch === 'auto') {
-    branch = getBranchFromBuild(build);
+    branch = getBranchFromBuild(build)
   }
 
-  let productId = 'Client.OS.rs2';
-  const productParams: string[] = [];
+  let productId = 'Client.OS.rs2'
+  const productParams: string[] = []
 
   // process product id from sku
   if (SKU_MAP.server.includes(sku)) {
-    productId = 'Server.OS';
+    productId = 'Server.OS'
   } else if (sku === 180) {
-    productId = 'WCOSDevice2.OS';
+    productId = 'WCOSDevice2.OS'
   } else if (sku === 184) {
-    productId = 'WCOSDevice1.OS';
+    productId = 'WCOSDevice1.OS'
   } else if (sku === 189) {
-    productId = 'WCOSDevice0.OS';
+    productId = 'WCOSDevice0.OS'
   } else if (sku === 210) {
-    productId = 'WNC.OS';
+    productId = 'WNC.OS'
   }
 
   for (const arch of arches) {
@@ -326,8 +326,8 @@ export async function composeFetchUpdateRequest({
       `PN=MSRT.${arch}&Source=UpdateOrchestrator&V=0.0.0.0`,
       `PN=SedimentPack.${arch}&Source=UpdateOrchestrator&V=0.0.0.0`,
       `PN=UUS.${arch}&Source=UpdateOrchestrator&V=0.0.0.0`,
-    ];
-    productParams.push(...productArchInfo);
+    ]
+    productParams.push(...productArchInfo)
   }
 
   const callerParams = [
@@ -337,19 +337,28 @@ export async function composeFetchUpdateRequest({
     'IsSeeker=1',
     'SheddingAware=1',
     'Id=MoUpdateOrchestrator',
-  ];
+  ]
 
-  const deviceAttrib = composeDeviceAttributes({ arch: arches, branch, build, flags, flight, ring, sku, type });
-  const productAttrib = encodeURIComponent(productParams.join(';'));
-  const callerAttrib = encodeURIComponent(`E:${callerParams.join('&')}`);
+  const deviceAttrib = composeDeviceAttributes({
+    arch: arches,
+    branch,
+    build,
+    flags,
+    flight,
+    ring,
+    sku,
+    type,
+  })
+  const productAttrib = encodeURIComponent(productParams.join(';'))
+  const callerAttrib = encodeURIComponent(`E:${callerParams.join('&')}`)
 
-  const syncCurrentOnly = flags.includes('thisonly');
+  const syncCurrentOnly = flags.includes('thisonly')
 
   return `
   <s:Envelope xmlns:a="http://www.w3.org/2005/08/addressing" xmlns:s="http://www.w3.org/2003/05/soap-envelope">
     <s:Header>
       <a:Action s:mustUnderstand="1">http://www.microsoft.com/SoftwareDistribution/Server/ClientWebService/SyncUpdates</a:Action>
-      <a:MessageID>urn:uuid:${uuid}</a:MessageID>
+      <a:MessageID>urn:uuid:${messageId}</a:MessageID>
       <a:To s:mustUnderstand="1">https://fe3.delivery.mp.microsoft.com/ClientWebService/client.asmx</a:To>
       <o:Security s:mustUnderstand="1" xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
         <Timestamp xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
@@ -398,5 +407,5 @@ export async function composeFetchUpdateRequest({
         </parameters>
       </SyncUpdates>
     </s:Body>
-  </s:Envelope>`;
+  </s:Envelope>`
 }

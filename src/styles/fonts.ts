@@ -1,11 +1,17 @@
-import { Inter, Raleway } from 'next/font/google';
+import { Fira_Code, Inter, Raleway } from 'next/font/google'
 
-export const inter = Inter({
-  variable: '--font-inter',
+export const sans = Inter({
+  variable: '--font-sans',
   subsets: ['latin'],
-});
+  preload: true,
+})
 
-export const raleway = Raleway({
-  variable: '--font-raleway',
+export const heading = Raleway({
+  variable: '--font-heading',
   subsets: ['latin'],
-});
+})
+
+export const code = Fira_Code({
+  variable: '--font-code',
+  subsets: ['latin', 'latin-ext'],
+})

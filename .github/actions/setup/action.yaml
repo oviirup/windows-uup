@@ -1,0 +1,29 @@
+name: Setup
+description: Setup workflow environment with bun
+
+inputs:
+  bun-version:
+    description: Version of bun to install. Eg. 1.x, 0.7.x etc
+    default: 1.x
+    required: false
+  node-version:
+    description: Version of node.js to install. Eg. 18.x, 21.7.4 etc
+    default: 22.x
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: ✅ Checkout
+      uses: actions/checkout@v4
+    - name: 🟡 Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: ${{ inputs.bun-version }}
+    - name: 🟢 Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - name: 📦 Install dependencies
+      shell: bash
+      run: bun install
